@@ -6,7 +6,7 @@ Welcome to the Kafka Beginner Project! This repository provides a simple, beginn
 
 ## 📸 Architecture Overview
 
-![Kafka Microservices Implementation](./implementation.png)
+![Kafka Microservices Implementation](Implementation.png)
 
 ---
 
