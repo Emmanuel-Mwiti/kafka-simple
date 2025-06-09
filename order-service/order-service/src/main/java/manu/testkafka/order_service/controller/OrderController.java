@@ -23,13 +23,12 @@ public class OrderController {
     public String placeOrder(@RequestBody Order order) {
         order.setOrderId(UUID.randomUUID().toString());
         OrderEvent orderEvent = new OrderEvent();
-        orderEvent.setStatus("PENDING");
-        orderEvent.setMessage("Order status is in pending state");
+        orderEvent.setStatus("CREATED");
+        orderEvent.setMessage("Order creation event initiated");
         orderEvent.setOrder(order);
 
         orderProducer.sendMessage(orderEvent);
 
-        return "order placed successfully";
-
+        return "Order placed successfully. You will receive a confirmation email shortly.";
     }
 }

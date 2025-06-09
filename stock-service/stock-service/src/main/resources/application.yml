@@ -1,0 +1,40 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: stock-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/kafka_demo_db?createDatabaseIfNotExist=true
+    username: root
+    password: 1234 # <-- Your password here
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: stock-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    topic:
+      # Topic to listen for new orders from
+      order_topic: order_topics
+      # Topic to publish stock check results to
+      stock_topic: stock_topics

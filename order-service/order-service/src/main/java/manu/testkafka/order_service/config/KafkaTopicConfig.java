@@ -8,14 +8,23 @@ import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
 public class KafkaTopicConfig {
-    @Value("${spring.kafka.topic.name}")
-    private String topicName;
+    @Value("${spring.kafka.topic.order_topic}")
+    private String orderTopicName;
 
-    // Spring bean for kafka topic
+    @Value("${spring.kafka.topic.stock_topic}")
+    private String stockTopicName;
+
     @Bean
-    public NewTopic topic() {
+    public NewTopic orderTopic() {
         return TopicBuilder
-                .name(topicName)
+                .name(orderTopicName)
+                .build();
+    }
+
+    @Bean
+    public NewTopic stockTopic() {
+        return TopicBuilder
+                .name(stockTopicName)
                 .build();
     }
 }
