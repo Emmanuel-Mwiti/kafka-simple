@@ -45,3 +45,83 @@ This project consists of **three services** that communicate using Kafka as the 
 ### 🛠️ To Run Using Docker
 ```bash
 docker-compose up --build
+```
+# Kafka Best Practices Checklist  
+
+---
+
+## ⚙️ Setup & Infrastructure
+- Latest stable Kafka version
+- ≥ 3 brokers (odd number)
+- Use partitions for scalability
+- Replication factor ≥ 3
+- KRaft mode if new cluster
+- Fast SSDs; separate OS/log disks
+- Monitor broker & disk health
+
+## 🛡 Security
+- Enable TLS/SSL encryption
+- Use SASL/SCRAM for authentication
+- Configure ACLs for topic access
+- Secure schema registry & Connect
+
+## 📦 Topic Design
+- Clear naming (`orders.created`)
+- Choose partition count wisely
+- Set cleanup policy (delete vs compact)
+- Avoid too many small topics
+
+## 📝 Producer Best Practices
+- Enable idempotence
+- Use compression (lz4/zstd)
+- Batch records (linger.ms, batch.size)
+- Handle retries/timeouts
+- Use keys to control partitioning
+
+## 📥 Consumer Best Practices
+- Use consumer groups
+- Understand offset commit strategies
+- Tune poll configs
+- Handle rebalances
+- Avoid slow consumers (prevent lag)
+
+## 📡 Inter-service Design
+- Prefer async/event-driven
+- Version schemas & use registry
+- Support backward/forward compatibility
+
+## 📊 Monitoring & Observability
+- Prometheus + Grafana
+- Kafka UI tools (AKHQ, Conduktor)
+- Distributed tracing (Jaeger, Zipkin)
+- Monitor consumer lag & broker metrics
+
+## 🔄 Operations
+- Automate topic creation (IaC)
+- CI/CD for configs & deployments
+- Plan scaling (partitions, brokers)
+- Backup & test disaster recovery
+- Rolling restarts for upgrades
+
+## ⚡ Application Coding
+- Avoid blocking calls in reactive apps
+- Use retries & dead letter topics
+- Keep consumers idempotent
+- Add context (correlation IDs)
+
+## 🧪 Testing & Quality
+- Use testcontainers for integration
+- Mock Kafka only in unit tests
+- Contract testing for schema changes
+
+---
+**Summary:**
+- Secure by default
+- Partition wisely
+- Monitor everything
+- Automate deployment
+- Idempotent consumers
+- Schema registry for evolution
+
+
+
