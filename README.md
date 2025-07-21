@@ -123,5 +123,83 @@ docker-compose up --build
 - Idempotent consumers
 - Schema registry for evolution
 
+  # 🐳 Kafka with KRaft — Quick Reference
+
+Direct, essential CLI & setup notes for running Apache Kafka in KRaft mode (no ZooKeeper).
+
+---
+
+## ⚙️ Setup Kafka in KRaft Mode
+
+```bash
+# Generate a unique cluster ID
+bin/kafka-storage.sh random-uuid
+
+# Format storage using the generated cluster ID
+bin/kafka-storage.sh format -t <cluster-id> -c config/kraft/server.properties
+
+# Start the Kafka broker
+bin/kafka-server-start.sh config/kraft/server.properties
+```
+# 🌍 Avoid Using localhost
+Edit config/kraft/server.properties:
+```bash
+listeners=PLAINTEXT://0.0.0.0:9092
+advertised.listeners=PLAINTEXT://192.168.1.50:9092
+```
+## 📌 Topic Management
+```bash
+# Create topic
+kafka-topics.sh --bootstrap-server <host:port> --create --topic my_topic
+
+# List topics
+kafka-topics.sh --bootstrap-server <host:port> --list
+
+# Describe topic
+kafka-topics.sh --bootstrap-server <host:port> --describe --topic my_topic
+
+# Delete topic
+kafka-topics.sh --bootstrap-server <host:port> --delete --topic my_topic
+```
+## ✏️ Produce & Consume Messages
+```bash
+# Produce messages
+kafka-console-producer.sh --bootstrap-server <host:port> --topic my_topic
+
+# Consume from beginning
+kafka-console-consumer.sh --bootstrap-server <host:port> --topic my_topic --from-beginning
+
+# Consume new messages
+kafka-console-consumer.sh --bootstrap-server <host:port> --topic my_topic
+
+```
+
+## 🛠️ Manage Partitions & Configs
+```bash
+# Increase partitions
+kafka-topics.sh --bootstrap-server <host:port> --alter --topic my_topic --partitions 3
+
+# Add/update topic config
+kafka-configs.sh --bootstrap-server <host:port> --entity-type topics \
+  --entity-name my_topic --alter --add-config retention.ms=86400000
+
+# Describe topic config
+kafka-configs.sh --bootstrap-server <host:port> --entity-type topics \
+  --entity-name my_topic --describe
+```
+## 👥 Consumer Groups
+```bash
+# List groups
+kafka-consumer-groups.sh --bootstrap-server <host:port> --list
+
+# Describe group
+kafka-consumer-groups.sh --bootstrap-server <host:port> --describe --group my_group
+
+# Delete group
+kafka-consumer-groups.sh --bootstrap-server <host:port> --delete --group my_group
+
+```
+
+
 
 
