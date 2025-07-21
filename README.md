@@ -152,6 +152,9 @@ advertised.listeners=PLAINTEXT://192.168.1.50:9092
 # Create topic
 kafka-topics.sh --bootstrap-server <host:port> --create --topic my_topic
 
+# Create topic with partitions and replication factor(1 since locally we have 1 broker)
+kafka-topics.sh --bootstrap-server localhost:9092 --create --topic second_topic --partitions 3 --replication-factor 1
+
 # List topics
 kafka-topics.sh --bootstrap-server <host:port> --list
 
