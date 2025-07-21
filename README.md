@@ -149,6 +149,8 @@ advertised.listeners=PLAINTEXT://192.168.1.50:9092
 ```
 ## 📌 Topic Management
 ```bash
+
+(LEGACY ONES YOU HAD TO USE PLAYGROUND FOR CONFIGS- --producer.config playground.config)
 # Create topic
 kafka-topics.sh --bootstrap-server <host:port> --create --topic my_topic
 
@@ -161,8 +163,52 @@ kafka-topics.sh --bootstrap-server <host:port> --list
 # Describe topic
 kafka-topics.sh --bootstrap-server <host:port> --describe --topic my_topic
 
+# Produce to a topic
+kafka-console-producer.sh --bootstrap-server localhost:9092 --topic first_topic
+
+# producing with properties
+kafka-console-producer.sh --bootstrap-server localhost:9092 --topic first_topic --producer-property acks=all
+
+# producing to a non existing topic- first takes long and then throws an error...It will create though after some time
+# Best practice is disable auto topic creation
+kafka-console-producer.sh --bootstrap-server localhost:9092 --topic first_topic1
+
+# produce with keys
+kafka-console-producer.sh --bootstrap-server localhost:9092 --topic first_topic --property parse.key=true --property key.separator=:
+
+
 # Delete topic
 kafka-topics.sh --bootstrap-server <host:port> --delete --topic my_topic
+
+#Consume from a topic:
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic second_topic
+
+#Produce using round robin partitioner:
+kafka-console-producer.sh --bootstrap-server localhost:9092 --producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner --topic second_topic
+
+
+# Consume from beginning
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic second_topic --from-beginning
+
+#Format consume in an ordered manner
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic second_topic --formatter kafka.tools.DefaultMessageFormatter --property print.timestamp=true --property print.key=true --property print.value=true --property print.partition=true --from-beginning
+
+
+#Consume from a specific group
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic third_topic --group my-first-application
+
+# list consumer groups
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+
+# describe one specific group
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group my-second-application
+
+# Dry Run: reset the offsets to the beginning of each partition <CONSUMER MUST NOT BE CONSUMING WHEN YOU ARE RESETTING>
+kafka-consumer-groups.sh  --bootstrap-server localhost:9092 --group my-first-application --reset-offsets --to-earliest --topic third_topic --dry-run
+
+# execute flag is needed
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group my-first-application --reset-offsets --to-earliest --topic third_topic --execute
+
 ```
 ## ✏️ Produce & Consume Messages
 ```bash
